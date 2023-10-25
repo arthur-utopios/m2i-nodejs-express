@@ -7,7 +7,13 @@ import cors from 'cors';
 const app = express();
 
 // Middleware d'application: s'applique à TOUS LES ENDPOINTS
+
+// Cross-origin resource sharing
+//mécanisme qui consiste à ajouter des en-têtes HTTP 
+//pour permettre d'accéder à des ressources d'un serveur situé sur une autre origine que le site courant
 app.use(cors());
+
+// Middleware de serialization/deserialization 
 app.use(express.json());
 app.use(dateMiddleware);
 app.use(queryLogger);
