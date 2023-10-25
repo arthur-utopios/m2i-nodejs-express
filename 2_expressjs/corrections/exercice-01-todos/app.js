@@ -17,7 +17,13 @@ app.get('/todos', (req, res) => {
 
 // Renvoie un todo spécifique
 app.get('/todos/:todoId', (req, res) => {
-    res.send("hello");
+    let todo = todoDao.findById(req.params.todoId);
+
+    if(todo == undefined) {
+        res.status(404).json({code: 404, message: "aucun todo trouvé avec cet id"});
+    }
+
+    res.json(todo);
 });
 
 // Créé un todo
@@ -29,22 +35,33 @@ app.post('/todos', (req, res) => {
 
 // Mettre à jour le todo
 app.put('/todos/:todoId', (req, res) => {
-    res.send("hello");
+    // Récupération des informations depuis le corps de la requête
+    const {id, title, content, statut} = req.body;
+
+    // On vérifie que l'id de l'objet correspond à celui passé en paramètre
+    if(req.params.todoId != id) res.sendStatus(409);
+
+    // Initialisation d'un todo
+    let todo = new Todo(id, title, content, statut);
+
+    // Mise à jour du todo
+    todoDao.updateTodo(todo) ? res.sendStatus(200) : res.status(400).json({code: 400, message: "problème lors de la mise à jour du todo"})
 });
 
 // Modifier statut
-app.put('/todos/:todoId', (req, res) => {
-    res.send("hello");
+app.patch('/todos/:todoId/statut', (req, res) => {
+    todoDao.updateStatut(req.params.todoId) ? res.sendStatus(200) : res.sendStatus(400);
 });
 
 // Supprimer le todo
 app.delete('/todos/:todoId', (req, res) => {
-    res.send("hello");
+    todoDao.deleteTodo(req.params.todoId);
+    res.sendStatus(200);
 });
 
 // Récupérer un todo par son title
 app.get('/todos/search/:search', (req, res) => {
-    res.send("hello");
+    res.json(todoDao.searchByTitle(req.params.search));
 });
 
 app.listen(3001, () => {

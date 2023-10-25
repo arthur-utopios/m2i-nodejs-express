@@ -22,8 +22,11 @@ export class TodoDao {
   }
 
   save(todo) {
+    // Génération d'un uuid
     todo.id = uuidv4();
+    // Ajout au tableau de todos
     this.todos.push(todo);
+    // Mise à jour du fichier db.json (on réécrit tout)
     this.writeFile();
     return todo;
   }
@@ -33,13 +36,13 @@ export class TodoDao {
   }
 
   deleteTodo(id) {
-    this.todos.filter((t) => t.id !== id);
+    this.todos = this.todos.filter((t) => t.id !== id);
     this.writeFile();
   }
 
   updateTodo(todoUpdate) {
     const todo = this.findById(todoUpdate.id);
-    if (todo != undefined) {
+    if (todo == undefined) {
       return false;
     }
     todo.statut = todoUpdate.statut;
@@ -52,12 +55,16 @@ export class TodoDao {
 
   updateStatut(id) {
     const todo = this.findById(id);
-    if (todo != undefined) {
+    if (todo == undefined) {
       return false;
     }
     todo.statut = !todo.statut;
     this.writeFile();
 
     return true;
+  }
+
+  searchByTitle(title) {
+    return this.todos.filter(todo => todo.title === title);
   }
 }
