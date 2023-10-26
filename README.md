@@ -1,4 +1,4 @@
-<div style="display:flex; justify-content: center;">
+<div align="center">
 
 <a href="https://www.m2iformation.fr/">
 
@@ -8,7 +8,7 @@
 
 </div>
 
-<div style="display:flex; justify-content: center;">
+<div align="center">
 
 # Formation Node.js / Express.js
 
