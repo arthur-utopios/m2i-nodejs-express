@@ -4,44 +4,44 @@ import { v4 as uuidv4 } from "uuid";
 import { DataStore } from "../utils.js";
 
 export default class OrderDao {
-    constructor() {
+  constructor() {}
+
+  getAll() {
+    return DataStore.data.orders;
+  }
+
+  getOneById(id) {
+    return DataStore.data.orders.find((o) => (o.id == id));
+  }
+
+  save(order) {
+    const customerDao = new CustomerDao();
+    const productDao = new ProductDao();
+
+    // Vérifier que le client existe
+    if (customerDao.getOneById(order.customer.id) == undefined) {
+      throw new Error(`Unable to find user with id: ${order.customer.id}`);
     }
 
-    getAll() {
-        return DataStore.data.orders;
-    }
+    // Vérifier que les produits existent
+    order.products.forEach((p) => {
+      if (productDao.getOneById(p.id) === undefined) {
+        throw new Error(`Unable to find the product with id: ${p.id}`);
+      }
+    });
 
-    getOneById(id) {
-        return DataStore.data.orders.find(o => o.id = id);
-    }
+    // Mettre à jour le stock
+    order.products.forEach((p) => {
+      let product = productDao.getOneById(p.id);
+      product.stock--;
+      p.stock--;
+    });
 
-    save(order) {
-        const customerDao = new CustomerDao();
-        const productDao = new ProductDao();
+    // Créer l'id de la commande
+    order.id = uuidv4();
 
-        // Vérifier que le client existe
-        if (customerDao.getOneById(order.customer.id) === undefined) {
-            throw new Error(`Unable to find user with id: ${order.customer.id}`);
-        }
-
-        // Vérifier que les produits existent
-        order.products.forEach(p => {
-            if (productDao.getOneById(p.id) === undefined) {
-                throw new Error(`Unable to find the product with id: ${p.id}`);
-            }
-        });
-
-        // Mettre à jour le stock
-        order.products.forEach(p => {
-            const product = productDao.getOneById(p.id);
-            product.stock--;
-        });
-
-        // Créer l'id de la commande
-        order.id = uuidv4();
-
-        DataStore.data.orders.push(order);
-        DataStore.write();
-        return order;
-    }
+    DataStore.data.orders.push(order);
+    DataStore.write();
+    return order;
+  }
 }

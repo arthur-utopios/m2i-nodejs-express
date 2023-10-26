@@ -9,14 +9,9 @@ import products from "./routes/products.js";
 const DB_PATH = resolve("./data/db.json");
 const PORT = 7777;
 
-// Création d'une instance de notre db pour manipuler le fichier .json
-// On l'exporte pour la partager avec les différents modules de notre app
+//Initialisation de la classe DataStore pour gérer la persistance dans un fichier .json
 DataStore.file = DB_PATH;
-DataStore.data = {
-  customers: [],
-  orders: [],
-  products: [],
-};
+DataStore.data = {customers: [], orders: [],products: []};
 
 const app = express();
 
