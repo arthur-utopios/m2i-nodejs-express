@@ -20,7 +20,7 @@ export default class OrderDao {
 
     // Vérifier que le client existe
     if (customerDao.getOneById(order.customer.id) == undefined) {
-      throw new Error(`Unable to find user with id: ${order.customer.id}`);
+      throw new Error(`Unable to find customer with id: ${order.customer.id}`);
     }
 
     // Vérifier que les produits existent

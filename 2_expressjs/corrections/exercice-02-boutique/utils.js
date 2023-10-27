@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "fs";
 
-// Cette classe statique permet de gérer une collections de modèles dans un fichier json
+// Cette classe statique permet de gérer une collection de modèles dans un fichier json
 export class DataStore {
   static file;
   static data;
